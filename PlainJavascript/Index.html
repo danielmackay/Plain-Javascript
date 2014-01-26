@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>http://blog.adtile.me/2014/01/16/a-dive-into-plain-javascript/</title>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log('loaded!');
+
+            //
+            // Selectors
+            //
+            console.log(document.querySelector("div"));
+            console.log(document.querySelectorAll("div"));
+            console.log(document.querySelectorAll(".container div"));
+            console.log(document.querySelectorAll(".container div p"));
+
+            //
+            // Traversing the DOM
+            //
+            var node = document.querySelector(".container");
+            cl('parent', node.parentNode);
+            cl('next', node.nextSibling);
+            cl('prev', node.previousSibling);
+            cl('child', node.children[0]);
+            cl('last', node.lastElementChild);
+
+            //
+            // Adding and removing classes
+            //
+            var element = document.querySelector(".container");
+            element.className = "new-container";
+
+            element = document.querySelector(".new-container");
+            element.className += " old-container";
+
+            if ("classList" in document.documentElement)
+                console.log('classList supported');
+
+            console.log(document.documentElement);
+
+            element = document.querySelector(".inner1");
+            element.classList.add("inner-new");
+            element.classList.remove("inner1");
+            cl('contains .inner1', element.classList.contains(".inner1"));
+            element.classList.toggle("active");
+
+            //
+            // Event listeners
+            //
+            element = document.querySelector(".inner-new p");
+            element.addEventListener("click", function () {
+                alert('paragraph clicked!');
+            });
+
+            var links = document.querySelectorAll("p");
+            [].forEach.call(links, function (el) {
+                el.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    alert('paragraph clicked!');
+                }, false);
+            });
+
+            // addEventListener can take an object as a 2nd parameter.  If it has a function called 'handleEvent', it will call it when the event fires
+            var object = {
+                init: function() {
+                    var button = document.querySelector("button");
+                    button.addEventListener("click", this, false);
+                    button.addEventListener("touchstart", this, false);
+
+                },
+                handleEvent: function(e) {
+                    switch (e.type) {
+                    case "click":
+                        this.action();
+                        break;
+                    case "touchstart":
+                        this.action();
+                        break;
+                    }
+                },
+                action: function() {
+                    alert('Clicked or touched!');
+                }
+            };
+            object.init();
+            
+            //
+            // DOM Manipulation
+            // 
+            element = document.querySelector("p");
+            var clone = element.cloneNode(true);
+            clone.style.background = "#ccc";
+
+            element.appendChild(clone);
+
+            function cl(comment, result) {
+                console.log(comment);
+                console.log(result);
+            }
+        })
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="inner1">
+                <p>
+                    Lorem.
+                </p>
+                <p>
+                    Lorem ipsum.
+                </p>
+                <p>
+                    Lorem ipsum dolor.
+                </p>
+            </div>
+            <div class="inner2">
+                <p>
+                    Lorem ipsum dolor sit.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur.
+                </p>
+            </div>
+        </div>
+        <div class="container2">
+        </div>
+        <button>Do something</button>
+        <input name="country" list="country_name">
+        <datalist id="country_name">
+            <option value="Afghanistan">
+            <option value="Albania">
+            <option value="Algeria">
+            <option value="Andorra">
+            <option value="Armenia">
+            <option value="Australia">
+            <option value="Austria">
+            <option value="Azerbaijan">
+                <!-- etc. -->
+        </datalist>
+    </div>
+</body>
+</html>
